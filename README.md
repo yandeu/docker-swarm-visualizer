@@ -10,9 +10,10 @@
 - Vertical Service **Autoscaler** (in development)
 - Automated Image Updates (soon)
 
-## Docker Hub
+## Repositories
 
-Check out the image on [`hub.docker.com`](https://hub.docker.com/r/yandeu/visualizer).
+- [`github.com`](https://github.com/yandeu/docker-swarm-visualizer)
+- [`hub.docker.com`](https://hub.docker.com/r/yandeu/visualizer)
 
 ## Info
 
