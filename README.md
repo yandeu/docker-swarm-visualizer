@@ -1,6 +1,8 @@
 # Docker Swarm Visualizer
 
-![screenshot](https://raw.githubusercontent.com/yandeu/visualizer-swarm-visualizer/main/readme/screenshot.webp)
+<a href="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.webp">
+   <img width="910" alt="screenshot" src="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.webp">
+</a>
 
 ## Features
 
@@ -25,7 +27,7 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 3. Make sure the nodes can communicate with each other on port **9501/tcp**.
 
 4. Deploy the Visualizer  
-   [`docker stack deploy -c docker-compose.yml visualizer`](https://github.com/yandeu/docker-swarm-visualizer/main/docker-compose.yml)
+   [`docker stack deploy -c docker-compose.yml visualizer`](https://github.com/yandeu/docker-swarm-visualizer/blob/main/docker-compose.yml)
 
 5. Open the Visualizer Dashboard  
    `http://127.0.0.1:9500` or `http://[NODE_IP]:9500`
@@ -34,4 +36,4 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 
 _In Beta_  
 Set `environment` variable `TASKS` to `true` in both services (manager and agent).  
-See the [`nginx.tasks.yml`](https://github.com/yandeu/docker-swarm-visualizer/blob/main/dev/nginx.tasks.yml).
+Then, check out the [`nginx.tasks.yml`](https://github.com/yandeu/docker-swarm-visualizer/blob/main/dev/nginx.tasks.yml) example.
