@@ -1,0 +1,248 @@
+:root {
+  --black: #0c0e14;
+  --white: #f8f8f2;
+  --gray: #6272a4;
+  --blue: #8be9fd;
+  --green: #50fa7b;
+  --orange: #ffb86c;
+  --red: #ff79c6;
+  --violet: #bd93f9;
+  --yellow: #f1fa8c;
+}
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  background: #0c0e14;
+  color: #f8f8f2;
+  font-size: 14px;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+h1 {
+  text-align: center;
+}
+
+/* colors */
+.is-blue {
+  color: var(--blue);
+}
+.is-green {
+  color: var(--green);
+}
+.is-orange {
+  color: var(--orange);
+}
+.is-red {
+  color: var(--red);
+}
+.is-violet {
+  color: var(--violet);
+}
+.is-yellow {
+  color: var(--yellow);
+}
+
+/* grid inspired by https://codepen.io/rickyruiz/pen/KemeoX */
+#nodes {
+  min-height: calc(100vh - 3em);
+  display: grid;
+  grid-gap: 4px;
+  padding: 1em;
+  counter-reset: grid-items;
+  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  margin: 4px;
+  overflow: hidden;
+  border: 1px #6272a4 solid;
+  border-radius: 4px;
+  background: #2c3348;
+  counter-increment: grid-item;
+}
+.node.down {
+  opacity: 0.5;
+}
+
+.node-info {
+  position: relative;
+  padding: 8px;
+  padding-top: 0px;
+  border-bottom: 1px #6272a4 solid;
+  margin: 8px;
+  margin-bottom: 0;
+  min-height: 112px;
+}
+
+/* .node-containers {} */
+
+.container {
+  font-size: 12px;
+  padding: 8px;
+  margin: 12px;
+  border-width: 1px;
+  border-color: var(--gray);
+  border-style: solid;
+  border-radius: 2px;
+  background: #242b40;
+  overflow: hidden;
+  opacity: 0.5;
+  position: relative;
+
+  max-height: 160px;
+  transition: all 500ms linear;
+}
+.container.deleting {
+  padding: 0px;
+  margin: -6px;
+  max-height: 0px;
+  border: 0px #242b40 solid;
+  opacity: 0;
+}
+.container.running {
+  opacity: 1;
+}
+.container.exited {
+  border-color: var(--black);
+}
+.container.blue {
+  border-color: var(--blue);
+}
+.container.green {
+  border-color: var(--green);
+}
+.container.orange {
+  border-color: var(--orange);
+}
+.container.red {
+  border-color: var(--red);
+}
+.container.violet {
+  border-color: var(--violet);
+}
+.container.yellow {
+  border-color: var(--yellow);
+}
+.container .action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  font-size: 20px;
+  right: 1px;
+  bottom: 1px;
+  color: white;
+  background: transparent;
+  line-height: 1.1;
+  text-align: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+}
+.container .action:hover {
+  background: #676e84;
+  animation: shake 500ms linear both;
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: rotate(20deg);
+  }
+  20%,
+  80% {
+    transform: rotate(-20deg);
+  }
+  30%,
+  50%,
+  70% {
+    transform: rotate(10deg);
+  }
+  40%,
+  60% {
+    transform: rotate(-10deg);
+  }
+}
+
+ul {
+  margin: unset;
+  padding: unset;
+}
+
+li {
+  list-style: none;
+  line-height: 1.4;
+}
+
+/* circles */
+.circle {
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  margin-top: 2px;
+  margin-right: 4px;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  opacity: 1;
+}
+/* states */
+.circle.red {
+  background-color: #ff79c6;
+  border: 2px #ff79c6 solid;
+} /* unavailable/down/stopped */
+.circle.orange {
+  background-color: #ffb86c;
+  border: 2px #ffb86c solid;
+} /* warning/error */
+.circle.yellow {
+  background-color: #f1fa8c;
+  border: 2px #f1fa8c solid;
+} /* loading */
+.circle.green {
+  background-color: #50fa7b;
+  border: 2px #50fa7b solid;
+} /* available/up/running */
+.circle.worker {
+  background-color: transparent;
+}
+/* blinking state */
+.blink {
+  animation: blink 1s infinite;
+}
+@keyframes blink {
+  0% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0.25;
+  }
+}
+
+p#credits {
+  color: #273340;
+  position: relative;
+  bottom: 0.5em;
+  left: 1em;
+  margin: 0;
+  padding: 0;
+  line-height: 1;
+}
+#credits a {
+  color: #273340;
+}
+#credits a:hover {
+  color: #9da8b5;
+}

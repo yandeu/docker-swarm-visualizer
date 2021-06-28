@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  manager:
+    environment:
+      - MODE=manager
+      - TASKS=false # available soon
+    image: yandeu/visualizer:dev
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agent_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    healthcheck:
+      test: curl -f http://localhost:3500/healthcheck || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+    ports:
+      - '9500:3500'
+
+  agent:
+    environment:
+      - MODE=agent
+      - TASKS=false # available soon
+    image: yandeu/visualizer:dev
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agent_network
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+    healthcheck:
+      test: curl -f http://localhost:9501/healthcheck || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true

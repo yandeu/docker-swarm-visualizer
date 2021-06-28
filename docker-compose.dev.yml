@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  manager:
+    environment:
+      - MODE=manager
+      - TASKS=true # beta
+    image: 127.0.0.1:5000/visualizer:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/lib/docker/volumes:/var/lib/docker/volumes # not yet used
+    networks:
+      - agent_network
+    deploy:
+      mode: replicated
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+    healthcheck:
+      test: curl -f http://localhost:3500/healthcheck || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+    ports:
+      - '9500:3500'
+
+  agent:
+    environment:
+      - MODE=agent
+      - TASKS=true # beta
+    image: 127.0.0.1:5000/visualizer:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      # - /var/lib/docker/volumes:/var/lib/docker/volumes # not yet used
+    networks:
+      - agent_network
+    # ports:
+    #   - '9501:9501' # dev only!
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.platform.os == linux]
+    healthcheck:
+      test: curl -f http://localhost:9501/healthcheck || exit 1
+      interval: 10s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+
+networks:
+  agent_network:
+    driver: overlay
+    attachable: true

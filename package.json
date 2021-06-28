@@ -1,0 +1,49 @@
+{
+  "name": "visualizer",
+  "version": "0.0.0",
+  "description": "🐋 A Visualizer for Docker Swarm using the Docker Engine API and Node.JS.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "docker-publish-dev": "npm run build && docker build . -f Dockerfile -t yandeu/visualizer:dev && docker push yandeu/visualizer:dev",
+    "start": "node dist/index.js",
+    "start-dev": "nodemon dist/index.js",
+    "build": "rimraf dist && tsc -p tsconfig.browser.json && tsc -p tsconfig.node.json && node scripts/copy-files.mjs",
+    "dev": "npm run build && npm-run-all --parallel dev:*",
+    "dev:watch": "cross-env WATCH=true node scripts/copy-files.mjs",
+    "dev:tsc-browser": "tsc -p tsconfig.browser.json --watch",
+    "dev:tsc-node": "tsc -p tsconfig.node.json --watch",
+    "dev:manager": "cross-env TASKS=true nodemon --watch dist --delay 500ms dist/manager.js",
+    "dev:agent": "cross-env TASKS=true nodemon --watch dist --delay 500ms dist/agent.js",
+    "save": "git add . && git commit -m \"quick save\" && git push",
+    "format:check": "prettier --check src/**/*.ts --check src/**/*.html",
+    "format": "prettier --write src/**/*.ts --check src/**/*.html",
+    "registry": "docker service create --name registry --publish published=5000,target=5000 registry:2",
+    "docker-dev": "npm run build && npm-run-all docker-dev:*",
+    "docker-dev:build": "docker build . -f Dockerfile -t 127.0.0.1:5000/visualizer:latest",
+    "docker-dev:push": "docker push 127.0.0.1:5000/visualizer:latest",
+    "docker-dev:deploy": "docker stack deploy -c docker-compose.dev.yml visualizer",
+    "postinstall": "npm run build"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "express": "^4.17.1",
+    "node-os-utils": "^1.3.5",
+    "nodemon": "^2.0.7"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.12",
+    "@types/node": "^15.12.4",
+    "@yandeu/prettier-config": "^0.0.2",
+    "chokidar": "^3.5.2",
+    "cross-env": "^7.0.3",
+    "fs-extra": "^10.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.3.1",
+    "rimraf": "^3.0.2",
+    "typescript": "^4.3.4"
+  }
+}

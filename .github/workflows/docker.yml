@@ -1,0 +1,43 @@
+# read: https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Docker
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14.x
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build Packages
+        run: npm run build
+
+      - name: Build Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: false
+          tags: visualizer:latest
+
+      # - name: Run Tests
+      #   run: npm test
+
+      # - name: Run Prettier
+      #   run: npm run format
+
+      # - name: Run ESLint
+      #   run: npm run lint
+
+      # - name: Upload coverage to Codecov
+      #   uses: codecov/codecov-action@v1

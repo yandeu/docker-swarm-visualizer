@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "ESNext",
+
+    "lib": ["ES2020.Promise"],
+    "moduleResolution": "node",
+    "noImplicitAny": false
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts", "src/www/**/*"]
+}

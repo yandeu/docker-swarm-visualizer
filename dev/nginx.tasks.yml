@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - 8080:80
+    labels:
+      - visualizer.autoscale.min=1
+      - visualizer.autoscale.max=5
+      - visualizer.autoscale.up.cpu=20
+      - visualizer.autoscale.down.cpu=10
