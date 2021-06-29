@@ -1,7 +1,7 @@
 # Docker Swarm Visualizer
 
-<a href="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.webp">
-   <img width="910" alt="screenshot" src="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.webp">
+<a href="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.png">
+   <img width="850" alt="screenshot" src="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.png">
 </a>
 
 ## Features
