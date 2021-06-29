@@ -103,8 +103,8 @@ export const gaterInformationForContainerTasks = async () => {
     const service = r.labels['com.docker.swarm.service.name']
 
     // autoscaler
-    const cpuUp = r.labels['visualizer.autoscale.up.cpu']
-    const cpuDown = r.labels['visualizer.autoscale.down.cpu']
+    const cpuUp = parseFloat(r.labels['visualizer.autoscale.up.cpu'])
+    const cpuDown = parseFloat(r.labels['visualizer.autoscale.down.cpu'])
     const max = parseInt(r.labels['visualizer.autoscale.max'])
     const min = parseInt(r.labels['visualizer.autoscale.min'])
 
@@ -114,10 +114,10 @@ export const gaterInformationForContainerTasks = async () => {
     const autoscaler: AutoscalerSettings = { min, max, up: { cpu: cpuUp }, down: { cpu: cpuDown } }
 
     if (cpuUsage && cpuUsage.cpu >= 0 && service && max > 0 && min > 0) {
-      if (cpuUsage.cpu > parseInt(cpuUp)) {
+      if (cpuUsage.cpu > cpuUp * 100) {
         tasks.push({ name: 'SCALE_UP', service: service, autoscaler, cpuUsage })
       }
-      if (cpuUsage.cpu < parseInt(cpuDown)) {
+      if (cpuUsage.cpu < cpuDown * 100) {
         tasks.push({ name: 'SCALE_DOWN', service: service, autoscaler, cpuUsage })
       }
     }
