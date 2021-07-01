@@ -22,8 +22,7 @@
     "docker-dev": "npm run build && npm-run-all docker-dev:*",
     "docker-dev:build": "docker build . -f Dockerfile -t 127.0.0.1:5000/visualizer:latest",
     "docker-dev:push": "docker push 127.0.0.1:5000/visualizer:latest",
-    "docker-dev:deploy": "docker stack deploy -c docker-compose.dev.yml visualizer",
-    "postinstall": "npm run build"
+    "docker-dev:deploy": "docker stack deploy -c docker-compose.dev.yml visualizer"
   },
   "keywords": [],
   "author": "",
