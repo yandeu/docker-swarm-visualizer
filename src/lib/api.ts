@@ -62,10 +62,32 @@ export const containerRemove = async id => {
   return await docker(`containers/${id}?force=true`, 'DELETE')
 }
 
-export const info = async () => {
+export const info = async (
+  collectUsage = true
+): Promise<{
+  NodeID: any
+  NodeAddr: any
+  NCPU: any
+  MemTotal: any
+  OperatingSystem: any
+  cpuCount?: any
+  cpuUsage?: any
+  memUsage?: any
+  disk?: any
+}> => {
   const info: any = await docker('info')
 
+  if (!collectUsage)
+    return {
+      NodeID: info.Swarm.NodeID,
+      NodeAddr: info.Swarm.NodeAddr,
+      NCPU: info.NCPU,
+      MemTotal: info.MemTotal,
+      OperatingSystem: info.OperatingSystem
+    }
+
   return {
+    NodeID: info.Swarm.NodeID,
     NodeAddr: info.Swarm.NodeAddr,
     NCPU: info.NCPU,
     MemTotal: info.MemTotal,
