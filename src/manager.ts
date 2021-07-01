@@ -5,7 +5,7 @@
  */
 
 import express from 'express'
-import { nodeInfo, systemDF, containerStats } from './lib/api.js'
+import { nodesInfo, systemDF, containerStats } from './lib/api.js'
 import { fetch } from './lib/fetch.js'
 import { resolve, join } from 'path'
 
@@ -16,9 +16,11 @@ import axios from 'axios'
 import { agentDNSLookup } from './lib/dns.js'
 
 // tasks (beta)
+import { tasksRouter } from './tasks/manager.js'
 const tasks = process.env.TASKS
 setTimeout(() => console.log(tasks ? '[manager] tasks are enabled' : '[manager] tasks are disabled'))
-if (tasks) setTimeout(() => import('./tasks/manager.js'))
+if (tasks === 'true') setTimeout(() => import('./tasks/manager.js'))
+app.use('/tasks', tasksRouter)
 
 app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))
 
@@ -58,7 +60,7 @@ app.get('/api/dev/system/df', async (req, res) => {
 })
 
 app.get('/api/dev/nodes', async (req, res) => {
-  const nodes = await nodeInfo()
+  const nodes = await nodesInfo()
   try {
     return res.json(nodes)
   } catch (err) {
@@ -106,7 +108,7 @@ app.get('/api/dev/:node/containers', async (req, res) => {
 })
 
 app.get('/api/dev', async (req, res) => {
-  const nodes = await nodeInfo()
+  const nodes = await nodesInfo()
   const addrs = nodes.map(n => n.Addr)
 
   const promises: any[] = []

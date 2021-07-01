@@ -12,10 +12,12 @@ export const systemDF = async () => {
   return await docker('system/df')
 }
 
-export const nodeInfo = async () => {
+export const nodesInfo = async () => {
   const nodes: any = await docker('nodes')
   return nodes.map(node => {
     return {
+      ID: node.ID,
+      Version: node.Version.Index,
       Addr: node.Status.Addr,
       Role: node.Spec.Role,
       Availability: node.Spec.Availability,
