@@ -38,17 +38,18 @@ const addContainersToNode = async (NodeAddrID, ip, MemTotal) => {
     else return 1
   }
 
-  const _containers: any[] = []
+  let _containers: any[] = []
+
   containers.sort(sortRunningOnTop).forEach(container => {
     _containers.push(elements.container(container, MemTotal))
   })
 
+  // filter out manually deleted containers (in this case c would be 'DELETED')
+  _containers = _containers.filter(c => typeof c !== 'string')
+
   elements.complete.node(NodeAddrID, ip, _containers)
 
   return
-  // })
-
-  // await Promise.all(batch)
 }
 
 const main = async () => {

@@ -6,7 +6,10 @@
 
 import { toPercent, toMb, toGb, ipToId, calculateCPUUsage } from './misc.js'
 
+// keep track of services
 const services: string[] = []
+// keep track of deleted containers
+const deletedContainers: string[] = []
 
 const node = node => {
   const { Addr, Role, Availability, State } = node
@@ -93,6 +96,7 @@ const completeNode = (id, ip /* internal IP*/, containers) => {
 
       fetch(`/api/dev/agent/${ip}/containers/${id}`, { method: 'DELETE' })
         .then(() => {
+          deletedContainers.push(id)
           action.parentElement.classList.add('deleting')
           setTimeout(() => {
             action.parentElement.remove()
@@ -117,6 +121,8 @@ const container = (container, MemTotal) => {
   const cpuUsage = calculateCPUUsage(container.Stats)
 
   const { Image, Names, Labels, State, Status, Id } = container
+
+  if (deletedContainers.indexOf(Id) > 0) return 'DELETED'
 
   // add colors to services
   const colors = ['blue', 'yellow', 'red', 'green', 'orange', 'violet']
