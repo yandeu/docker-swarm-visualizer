@@ -16,10 +16,8 @@ import axios from 'axios'
 import { agentDNSLookup } from './lib/dns.js'
 
 // tasks (beta)
+import './tasks/manager.js'
 import { tasksRouter } from './tasks/manager.js'
-const tasks = process.env.TASKS
-setTimeout(() => console.log(tasks ? '[manager] tasks are enabled' : '[manager] tasks are disabled'))
-if (tasks === 'true') setTimeout(() => import('./tasks/manager.js'))
 app.use('/tasks', tasksRouter)
 
 app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))

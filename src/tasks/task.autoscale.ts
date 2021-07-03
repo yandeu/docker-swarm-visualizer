@@ -169,7 +169,9 @@ export const checkAgentsForNewTasks = async () => {
 
   const tasks: { [key: string]: Tasks[] } = {}
 
-  const dns: any = await agentDNSLookup()
+  const dns = await agentDNSLookup()
+  if (dns.length === 0) return tasks
+
   const agents: Tasks[][] = await Promise.all(dns.map(addr => fetch(`http://${addr}:9501/tasks`)()))
 
   // console.log('check tasks', agents?.length)

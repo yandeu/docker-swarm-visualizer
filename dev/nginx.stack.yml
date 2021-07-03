@@ -3,6 +3,11 @@ version: '3.9'
 services:
   nginx:
     image: nginx:latest
+    deploy:
+      replicas: 2
+      update_config:
+        parallelism: 2
+        order: start-first
     ports:
       - 8080:80
     labels:
@@ -10,3 +15,4 @@ services:
       - visualizer.autoscale.max=5
       - visualizer.autoscale.up.cpu=0.2
       - visualizer.autoscale.down.cpu=0.1
+      - visualizer.autoupdate=true

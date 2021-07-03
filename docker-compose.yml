@@ -3,8 +3,7 @@ version: '3.9'
 services:
   manager:
     environment:
-      - MODE=manager
-      - TASKS=false # available soon
+      - VISUALIZER_TYPE=manager
     image: yandeu/visualizer:dev
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -15,7 +14,7 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
-    labels:    
+    labels:
       - visualizer.manager
     healthcheck:
       test: curl -f http://localhost:3500/healthcheck || exit 1
@@ -28,8 +27,7 @@ services:
 
   agent:
     environment:
-      - MODE=agent
-      - TASKS=false # available soon
+      - VISUALIZER_TYPE=agent
     image: yandeu/visualizer:dev
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -39,7 +37,7 @@ services:
       mode: global
       placement:
         constraints: [node.platform.os == linux]
-    labels:    
+    labels:
       - visualizer.agent
     healthcheck:
       test: curl -f http://localhost:9501/healthcheck || exit 1

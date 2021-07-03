@@ -4,13 +4,13 @@
  * @license   {@link https://github.com/yandeu/docker-swarm-visualizer/blob/main/LICENSE LICENSE}
  */
 
-const agent = process.env.MODE === 'agent'
-const manager = process.env.MODE === 'manager'
+const agent = process.env.VISUALIZER_TYPE === 'agent'
+const manager = process.env.VISUALIZER_TYPE === 'manager'
 
 const main = async () => {
   if (agent) await import('./agent.js')
   else if (manager) await import('./manager.js')
-  else console.log('Pass env MODE; "agent" or "manager"')
+  else console.log('Pass env VISUALIZER_TYPE; "agent" or "manager"')
 }
 
 main()

@@ -10,11 +10,11 @@ const app = express()
 const port = process.env.PORT || 9501
 
 // tasks (beta)
+import './tasks/agent.js'
 import { tasksRouter } from './tasks/agent.js'
-const tasks = process.env.TASKS
-setTimeout(() => console.log(tasks ? '[agent] tasks are enabled' : '[agent] tasks are disabled'))
-if (tasks === 'true') setTimeout(() => import('./tasks/agent.js'))
 app.use('/tasks', tasksRouter)
+
+if (process.env.VISUALIZER_TASK_SUBNET) setTimeout(() => import('./tasks/task.subnet.js'))
 
 app.get('/', async (req, res) => {
   const _containers = await containers()

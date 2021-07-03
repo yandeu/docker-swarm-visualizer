@@ -3,8 +3,13 @@ version: '3.9'
 services:
   manager:
     environment:
-      - MODE=manager
-      - TASKS=true # beta
+      - VISUALIZER_TYPE=manager
+
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_AUTOSCALE=true
+      - VISUALIZER_TASK_AUTOUPDATE=true
+      - VISUALIZER_TASK_AUTOUPDATE_CRON="0 */6 * * *" # see: https://crontab.guru/
+
     image: 127.0.0.1:5000/visualizer:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -16,7 +21,7 @@ services:
       replicas: 1
       placement:
         constraints: [node.role == manager]
-    labels:    
+    labels:
       - visualizer.manager
     healthcheck:
       test: curl -f http://localhost:3500/healthcheck || exit 1
@@ -29,8 +34,12 @@ services:
 
   agent:
     environment:
-      - MODE=agent
-      - TASKS=true # beta
+      - VISUALIZER_TYPE=agent
+
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_AUTOSCALE=true
+      - VISUALIZER_TASK_SUBNET=true
+
     image: 127.0.0.1:5000/visualizer:latest
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -43,14 +52,24 @@ services:
       mode: global
       placement:
         constraints: [node.platform.os == linux]
-    labels:    
+    labels:
       - visualizer.agent
+
+      # optional
+      - visualizer.subnet.az1=172.31.0.0/20
+      - visualizer.subnet.az2=172.31.16.0/20
+      - visualizer.subnet.az3=172.31.32.0/20
+      - visualizer.subnet.local=192.168.0.0/16 # for testing locally
     healthcheck:
       test: curl -f http://localhost:9501/healthcheck || exit 1
       interval: 10s
       timeout: 2s
       retries: 3
       start_period: 5s
+
+# secrets:
+#   visualizer_registry_login:
+#     external: true
 
 networks:
   agent_network:
