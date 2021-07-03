@@ -12,10 +12,10 @@
 - 🎚️ **Vertical Service Autoscaler** (beta)  
   Automatically scale your services up and down based on CPU usage.
 
-- 📦 **Automated Image Updates** (in development)  
+- 📦 **Automated Image Updates** (beta)  
   Automatically pulls the latest images from your Registry.
 
-- 🏷️ **Auto Subnet Labeling** (in development)  
+- 🏷️ **Auto Subnet Labeling** (beta)  
   Detects in which subnet your node is to better spread your containers.
 
 - 🪝 **Webhooks** (in planning)  
@@ -59,20 +59,88 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 
 All tasks are either in Beta or in Development.
 
-### Autoscaler (beta)
+### Autoscaler
 
-Set `environment` variable `TASKS` to `true` in both services (manager and agent).
+To enable and use the autoscaler add the env and labels below to your services:
 
-Then, check out the [`nginx.tasks.yml`](https://github.com/yandeu/docker-swarm-visualizer/blob/main/dev/nginx.tasks.yml) example, to configure autoscaling.
+```yml
+services:
+  manager:
+    environment:
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_AUTOSCALE=true
 
-### Image Updates (dev)
+  agent:
+    environment:
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_AUTOSCALE=true
 
-_Nothing here yet._
+  your_app:
+    labels:
+      - visualizer.autoscale.min=1
+      - visualizer.autoscale.max=5
+      - visualizer.autoscale.up.cpu=0.2
+      - visualizer.autoscale.down.cpu=0.1
+```
 
-### Subnet Labeling (dev)
+### Image Updates
 
-_Nothing here yet._
+_For now, you can only update public images from docker hub. I will add support for private images and the GitHub's container registry soon._
 
-### Webhooks (planning)
+To enable and use the auto updates add the env and labels below to your services:
+
+```yml
+services:
+  manager:
+    environment:
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_AUTOUPDATE=true
+        # Check for an update every 6th hour (see: https://crontab.guru/)
+      - VISUALIZER_TASK_AUTOUPDATE_CRON="0 */6 * * *"
+
+  agent:
+    environment:
+      - (nothing else to add here)
+
+  your_app:
+    labels:
+      - visualizer.autoupdate=true
+```
+
+### Subnet Labeling
+
+To enable and use the subnet labeling add the env and labels below to your services:
+
+```yml
+services:
+  manager:
+    environment:
+      - (nothing else to add here)
+
+  agent:
+    environment:
+      - VISUALIZER_TASK=true
+      - VISUALIZER_TASK_SUBNET=true
+    labels:
+      # Adjust the labels below to your subnet.
+      # In this example are 3 subnets in 3 different availability zones, which I call az1, az2 and az3.
+      # az1 in subnet 172.31.0.0/20, az2 in 172.31.16.0/20 and az3 in 172.31.32.0/20.
+      # You can name your subnets as you want.
+      - visualizer.subnet.az1=172.31.0.0/20
+      - visualizer.subnet.az2=172.31.16.0/20
+      - visualizer.subnet.az3=172.31.32.0/20
+
+      # for testing locally
+      - visualizer.subnet.local=192.168.0.0/16
+
+  your_app:
+    deploy:
+      placement:
+        preferences:
+          # spread this service out over the "subnet" label
+          - spread: node.labels.subnet
+```
+
+### Webhooks
 
 _Nothing here yet._
