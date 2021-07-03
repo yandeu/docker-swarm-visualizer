@@ -42,14 +42,12 @@ import net from 'net'
 import { containers as getContainers, info, node } from '../lib/api.js'
 import { docker } from '../lib/docker.js'
 
-const main = async () => {
+export const addSubnetLabel = async () => {
   const { NodeAddr, NodeID } = await info()
 
   let containers = await getContainers(false)
-  containers = containers.filter(c => 'visualizer.agent' in c.Labels)
-
-  // there should be ONE visualizer agent on this node
-  if (containers.length !== 1) return
+  containers = containers.filter(c => 'visualizer.agent' in c.Labels && c.State === 'running')
+  if (containers.length === 0) return
 
   // check if there are any subnet labels
   const subnetRegex = /^visualizer.subnet./
@@ -58,7 +56,7 @@ const main = async () => {
     .map(entry => `${entry[0].replace(subnetRegex, '')}=${entry[1]}`)
 
   // const subnets = ['az1=172.31.0.0/20', 'az2=172.31.16.0/20', 'az3=172.31.32.0/20']
-  console.log(subnets)
+  console.log('available subnets', subnets)
 
   let found
   while (subnets.length > 0 && !found) {
@@ -86,13 +84,12 @@ const main = async () => {
     Spec.Labels = { ...Spec.Labels, subnet: found }
     await docker(`nodes/${NodeID}/update?version=${Version.Index}`, 'POST', Spec)
 
+    console.log('node subnet is:', found)
+
     // this node should now have a label called "subnet"
 
     // VERIFY (DEV)
-    console.log('The label for this node is:', found)
-    let { Spec: tmp } = await node(NodeID)
-    console.log(tmp)
+    // let { Spec: tmp } = await node(NodeID)
+    // console.log(tmp)
   }
 }
-
-main()

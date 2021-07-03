@@ -47,6 +47,19 @@ export { router as tasksRouter }
 
 if (TASK_ENABLED) {
   ;(async () => {
+    if (process.env.VISUALIZER_TASK_SUBNET === 'true') {
+      import('./task.subnet.js')
+        .then(module => {
+          console.log('[agent] task.subnet.js loaded')
+          module.addSubnetLabel().catch(err => {
+            console.log('[agent] Something went wrong in [addSubnetLabel()]: ', err.message)
+          })
+        })
+        .catch(err => {
+          console.log('[agent] task.subnet.js failed', err.message)
+        })
+    }
+
     // keep track which containers have tasks
     url = `http://127.0.0.1:9501/tasks/checkContainersForTasks?secret=${SECRET}`
     cmd = `curl --silent ${url}`

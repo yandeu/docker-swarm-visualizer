@@ -14,8 +14,6 @@ import './tasks/agent.js'
 import { tasksRouter } from './tasks/agent.js'
 app.use('/tasks', tasksRouter)
 
-if (process.env.VISUALIZER_TASK_SUBNET) setTimeout(() => import('./tasks/task.subnet.js'))
-
 app.get('/', async (req, res) => {
   const _containers = await containers()
   const _info = await info()
