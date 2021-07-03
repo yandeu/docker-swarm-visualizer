@@ -18,9 +18,9 @@ export const isDocker = async () => {
 }
 
 // access socket via node.js http
-export const docker = (path, method = 'GET', body = false) => {
+export const docker = (path, method = 'GET', body: any = false) => {
   const options: any = {
-    path: '/v1.41/' + path.replace(/\^\//, ''),
+    path: '/v1.41/' + path.replace(/^\//, ''),
     method: method
   }
 

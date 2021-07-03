@@ -50,5 +50,5 @@ export const curlWithCron = async (options: CurlWithCronOptions) => {
   const { url, cron, interval } = options
 
   if (USE_CRON) await addCronJob(cron)
-  else setInterval(fetch(url), interval)
+  else if (typeof interval === 'number' && interval > 0) setInterval(fetch(url), interval)
 }
