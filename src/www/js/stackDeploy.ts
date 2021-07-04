@@ -16,6 +16,8 @@ export const dropContainerInit = () => {
   if (!container) return
 
   container.addEventListener('drop', (event: DragEvent) => {
+    event.preventDefault()
+
     const file = event?.dataTransfer?.files[0]
     if (!file) return
 
@@ -32,7 +34,8 @@ export const dropContainerInit = () => {
     const reader = new FileReader()
     reader.onload = async event => {
       if (event?.target?.result) {
-        const result = await fetch('/stack/deploy', {
+        // const result = await fetch('/stack/deploy', {
+        const result = await fetch('/secret/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -49,20 +52,18 @@ export const dropContainerInit = () => {
     }
 
     reader.readAsText(file)
-
-    event.preventDefault()
   })
 
   container.addEventListener('dragover', (event: DragEvent) => {
     event.preventDefault()
   })
   container.addEventListener('dragenter', (event: DragEvent) => {
-    container.classList.toggle('over')
     event.preventDefault()
+    container.classList.toggle('over')
   })
   container.addEventListener('dragleave', (event: DragEvent) => {
-    container.classList.toggle('over')
     event.preventDefault()
+    container.classList.toggle('over')
   })
 }
 

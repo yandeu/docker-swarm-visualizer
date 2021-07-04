@@ -28,13 +28,30 @@ app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))
 
 app.post('/stack/deploy', async (req, res) => {
   try {
-    const { name, stack } = req.body as { name: string; stack: string }
+    let { name, stack } = req.body as { name: string; stack: string }
     const reg = /^(\S*?)\.?stack\.?(\S*?)\.ya?ml$/
 
-    const _name = reg.exec(name)
-    if (!_name || !_name[2]) throw new Error('Invalid stack name')
+    const arr = reg.exec(name)
+    if (!arr || !arr[2]) throw new Error('Invalid stack name')
+    name = arr[2]
 
-    const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${_name[2]}`)
+    const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${name}`)
+    return res.json({ status: 200, msg: result })
+  } catch (error) {
+    return res.status(400).json({ status: 400, msg: error.message })
+  }
+})
+
+app.post('/secret/create', async (req, res) => {
+  try {
+    let { name, secret } = req.body as { name: string; secret: string }
+    const reg = /^(\S+)(\.txt|\.json)$/
+
+    const arr = reg.exec(name)
+    if (!arr || !arr[1]) throw new Error('Secret has to be a .txt or .json file')
+    name = arr[1]
+
+    const result = await exec(` printf '${secret}' | docker secret create ${name} -`)
     return res.json({ status: 200, msg: result })
   } catch (error) {
     return res.status(400).json({ status: 400, msg: error.message })
