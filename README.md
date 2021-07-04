@@ -15,6 +15,9 @@
 - 📦 **Automated Image Updates** (beta)  
   Automatically pulls the latest images from your Registry.
 
+- 🚀 **Drag and Drop Deployment** (in development)
+  Easily deploy Stacks and Secrets via Drag and Drop.
+
 - 🏷️ **Auto Subnet Labeling** (beta)  
   Detects in which subnet your node is to better spread your containers.
 
