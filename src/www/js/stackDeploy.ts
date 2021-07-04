@@ -1,36 +1,54 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations
 export const dropContainer = `
 <div>
-<div id="drop-container">
+  <div id="drop-container">
     Drop Here
-</div>
-
- <input type="file" id="file-input" />
-
-
+  </div>
+  <!-- <input type="file" id="file-input" /> -->
 </div>
 `
 
 export const dropContainerInit = () => {
-  const fileInput = document.getElementById('file-input') as HTMLInputElement
-  if (!fileInput) return
+  // const fileInput = document.getElementById('file-input') as HTMLInputElement
+  // if (!fileInput) return
 
   const container = document.getElementById('drop-container')
   if (!container) return
 
   container.addEventListener('drop', (event: DragEvent) => {
-    if (event.dataTransfer.files.length > 1) {
+    const file = event?.dataTransfer?.files[0]
+    if (!file) return
+
+    const name = file.name
+
+    if (event && event.dataTransfer && event.dataTransfer.files.length > 1) {
       console.warn('Only one file at the time please.')
       return
     }
 
     // fileInput.files = event.dataTransfer.files
+    // const name = fileInput.files[0].name
 
     const reader = new FileReader()
-    reader.onload = event => {
-      console.log(event.target.result)
+    reader.onload = async event => {
+      if (event?.target?.result) {
+        const result = await fetch('/stack/deploy', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ name, stack: event.target.result })
+        })
+        const json = await result.json()
+        console.log('RESULT:')
+        json.msg
+          .replace(/\n$/, '')
+          .split('\n')
+          .forEach(m => console.log('=> ', m))
+      }
     }
-    reader.readAsText(event.dataTransfer.files[0])
+
+    reader.readAsText(file)
 
     event.preventDefault()
   })

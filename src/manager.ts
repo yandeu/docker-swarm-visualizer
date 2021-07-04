@@ -8,12 +8,16 @@ import express from 'express'
 import { nodesInfo, systemDF, containerStats } from './lib/api.js'
 import { fetch } from './lib/fetch.js'
 import { resolve, join } from 'path'
+import bodyParser from 'body-parser'
 
 const app = express()
 const port = process.env.PORT || 3500
 
+app.use(bodyParser.json())
+
 import axios from 'axios'
 import { agentDNSLookup } from './lib/dns.js'
+import { exec } from './lib/exec.js'
 
 // tasks (beta)
 import './tasks/manager.js'
@@ -21,6 +25,21 @@ import { tasksRouter } from './tasks/manager.js'
 app.use('/tasks', tasksRouter)
 
 app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))
+
+app.post('/stack/deploy', async (req, res) => {
+  try {
+    const { name, stack } = req.body as { name: string; stack: string }
+    const reg = /^(\S*?)\.?stack\.?(\S*?)\.ya?ml$/
+
+    const _name = reg.exec(name)
+    if (!_name || !_name[2]) throw new Error('Invalid stack name')
+
+    const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${_name[2]}`)
+    return res.json({ status: 200, msg: result })
+  } catch (error) {
+    return res.status(400).json({ status: 400, msg: error.message })
+  }
+})
 
 app.get('/api', (req, res) => {
   const routes = app._router.stack
