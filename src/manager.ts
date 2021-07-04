@@ -32,8 +32,11 @@ app.post('/stack/deploy', async (req, res) => {
     const reg = /^(\S*?)\.?stack\.?(\S*?)\.ya?ml$/
 
     const arr = reg.exec(name)
-    if (!arr || !arr[2]) throw new Error('Invalid stack name')
-    name = arr[2]
+    console.log(arr)
+    // @ts-ignore
+    console.log(!arr, !arr[1])
+    if (!arr || !arr[1]) throw new Error('Invalid stack name')
+    name = arr[1]
 
     const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${name}`)
     return res.json({ status: 200, msg: result })

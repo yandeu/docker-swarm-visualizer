@@ -34,13 +34,13 @@ export const dropContainerInit = () => {
     const reader = new FileReader()
     reader.onload = async event => {
       if (event?.target?.result) {
-        // const result = await fetch('/stack/deploy', {
-        const result = await fetch('/secret/create', {
+        const result = await fetch('/stack/deploy', {
+          // const result = await fetch('/secret/create', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ name, stack: event.target.result })
+          body: JSON.stringify({ name, stack: event.target.result, secret: event.target.result })
         })
         const json = await result.json()
         console.log('RESULT:')
