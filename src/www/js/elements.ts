@@ -4,7 +4,7 @@
  * @license   {@link https://github.com/yandeu/docker-swarm-visualizer/blob/main/LICENSE LICENSE}
  */
 
-import { toPercent, toMb, toGb, ipToId, calculateCPUUsage } from './misc.js'
+import { toPercent, toMb, toGb, ipToId, calculateCPUUsage, toMiB } from './misc.js'
 
 // keep track of services
 const services: string[] = []
@@ -115,8 +115,10 @@ const container = (container, MemTotal) => {
   // console.log('Name: ', container.Stats.name)
 
   const memory_stats = container.Stats.memory_stats
-  const mem = memory_stats.usage
-  const memPercent = (memory_stats.usage / memory_stats.limit) * 100
+
+  // https://github.com/docker/cli/blob/5f07d7d5a12423c0bc1fb507f4d006ad0cdfef42/cli/command/container/stats_helpers.go#L239
+  const mem = memory_stats.usage - memory_stats.stats.total_inactive_file || 0
+  const memPercent = (mem / memory_stats.limit) * 100
 
   const cpuUsage = calculateCPUUsage(container.Stats)
 
@@ -141,7 +143,7 @@ const container = (container, MemTotal) => {
         <li><b style="font-size: 14px;"class="is-${service && color}">${name}</b></li>
         <li>${State}</li>
         <li>${Status}</li>
-        <li>MEM ${toMb(mem)}MiB</li>
+        <li>MEM ${toMiB(mem)}MiB</li>
         <li>MEM ${memPercent.toFixed(2)}%</li>
         <li>CPU ${cpuUsage}</li>
       </ul>

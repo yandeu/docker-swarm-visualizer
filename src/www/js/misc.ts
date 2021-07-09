@@ -12,8 +12,16 @@ export const toMb = value => {
   return Math.round(value / 1000 / 1000)
 }
 
+export const toMiB = value => {
+  return Math.round(value / 1024 / 1024)
+}
+
 export const toGb = value => {
-  return (Math.round(value / 1000 / 1000) / 1000).toFixed(3)
+  return (value / 1000 / 1000 / 1000).toFixed(3)
+}
+
+export const toGiB = value => {
+  return (value / 1024 / 1024 / 1024).toFixed(3)
 }
 
 export const ipToId = id => {

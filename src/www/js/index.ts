@@ -4,7 +4,7 @@
  * @license   {@link https://github.com/yandeu/docker-swarm-visualizer/blob/main/LICENSE LICENSE}
  */
 
-import { toPercent, toMb, toGb, ipToId, addOrangeCircle } from './misc.js'
+import { toPercent, toMb, toGb, ipToId, addOrangeCircle, toGiB } from './misc.js'
 import { get } from './get.js'
 import { elements } from './elements.js'
 
@@ -89,7 +89,7 @@ const main = async () => {
 
       // replace usage
       const usage = nodeHTML.querySelector('.usage')
-      if (usage) usage.innerHTML = `${toGb(MemTotal)}G / ${cpuCount} Cors / ${disk?.Size}`
+      if (usage) usage.innerHTML = `${toGiB(MemTotal)}G / ${cpuCount} Cors / ${disk?.Size}`
 
       // replace usage_percent
       const usage_percent = nodeHTML.querySelector('.usage_percent')
