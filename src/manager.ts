@@ -29,16 +29,18 @@ app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))
 app.post('/stack/deploy', async (req, res) => {
   try {
     let { name, stack } = req.body as { name: string; stack: string }
+    stack = stack.replace(/'/gm, '"')
+
     const reg = /^(\S*?)\.?stack\.?(\S*?)\.ya?ml$/
 
     const arr = reg.exec(name)
-    console.log(arr)
-    // @ts-ignore
-    console.log(!arr, !arr[1])
-    if (!arr || !arr[1]) throw new Error('Invalid stack name')
-    name = arr[1]
+    if (!arr) throw new Error('Invalid stack name')
+
+    name = arr[1] || arr[2]
+    if (!name) throw new Error('Invalid stack name')
 
     const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${name}`)
+
     return res.json({ status: 200, msg: result })
   } catch (error) {
     return res.status(400).json({ status: 400, msg: error.message })
@@ -51,10 +53,13 @@ app.post('/secret/create', async (req, res) => {
     const reg = /^(\S+)(\.txt|\.json)$/
 
     const arr = reg.exec(name)
-    if (!arr || !arr[1]) throw new Error('Secret has to be a .txt or .json file')
+    if (!arr) throw new Error('Secret has to be a .txt or .json file')
+
     name = arr[1]
+    if (!name) throw new Error('Secret has to be a .txt or .json file')
 
     const result = await exec(` printf '${secret}' | docker secret create ${name} -`)
+
     return res.json({ status: 200, msg: result })
   } catch (error) {
     return res.status(400).json({ status: 400, msg: error.message })

@@ -1,11 +1,11 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations
 export const dropContainer = `
-<div>
+
   <div id="drop-container">
     Drop Here
   </div>
   <!-- <input type="file" id="file-input" /> -->
-</div>
+
 `
 
 export const dropContainerInit = () => {
@@ -70,11 +70,13 @@ export const dropContainerInit = () => {
 const main = () => {
   const style = document.createElement('style')
   style.innerText = /* css */ `
-  #drop-container { width:200px; height:200px; border: 10px dashed #ccc; }
+  #drop-wrapper { position: fixed; top: 33%; left: 50%; transform: translate(-50%, -50%); z-index: 999; background: #00000080; }
+  #drop-container { width:200px; height:200px; border: 10px dashed #ccc; text-align: center; vertical-align: middle; line-height: 200px; }
   #drop-container.over { background-color:red; }`
   document.body.prepend(style)
 
   const div = document.createElement('div')
+  div.id = 'drop-wrapper'
   div.innerHTML = dropContainer
   document.body.prepend(div)
 
