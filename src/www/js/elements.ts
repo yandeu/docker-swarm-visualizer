@@ -117,7 +117,7 @@ const container = (container, MemTotal) => {
   const memory_stats = container.Stats.memory_stats
 
   // https://github.com/docker/cli/blob/5f07d7d5a12423c0bc1fb507f4d006ad0cdfef42/cli/command/container/stats_helpers.go#L239
-  const mem = memory_stats.usage - memory_stats.stats.total_inactive_file || 0
+  const mem = memory_stats.usage - memory_stats?.stats?.total_inactive_file || 0
   const memPercent = (mem / memory_stats.limit) * 100
 
   const cpuUsage = calculateCPUUsage(container.Stats)

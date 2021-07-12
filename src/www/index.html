@@ -10,8 +10,30 @@
 
   <body>
     <div id="nodes"></div>
+
+    <style>
+      #snacks {
+        position: absolute;
+        bottom: 0px;
+        padding: 8px;
+        z-index: 999;
+      }
+      .snack {
+        color: black;
+        background: white;
+        padding: 6px 16px;
+        margin: 8px;
+        border-radius: 6px;
+        width: 200px;
+        font-size: 14px;
+        line-height: 2;
+      }
+    </style>
+    <div id="snacks"></div>
+
     <p id="credits">Developed and maintained by <a href="https://github.com/yandeu">@yandeu</a></p>
+
     <script type="module" src="./js/index.js"></script>
-    <script type="module" src="./js/stackDeploy.js"></script>
+    <script type="module" src="./js/upload.js"></script>
   </body>
 </html>

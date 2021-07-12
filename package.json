@@ -10,7 +10,7 @@
     "start-dev": "nodemon dist/index.js",
     "build": "rimraf dist && tsc -p tsconfig.browser.json && tsc -p tsconfig.node.json && node scripts/copy-files.mjs",
     "dev": "npm run build && npm-run-all --parallel dev:*",
-    "dev:watch": "cross-env WATCH=true node scripts/copy-files.mjs",
+    "dev:copy": "cross-env WATCH=false node scripts/copy-files.mjs",
     "dev:tsc-browser": "tsc -p tsconfig.browser.json --watch",
     "dev:tsc-node": "tsc -p tsconfig.node.json --watch",
     "dev:manager": "cross-env VISUALIZER_TASK=true VISUALIZER_TASK_AUTOSCALE=true VISUALIZER_TASK_AUTOUPDATE=true nodemon --watch dist --delay 800ms dist/manager.js",

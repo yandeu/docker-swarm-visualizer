@@ -26,9 +26,8 @@ app.use('/tasks', tasksRouter)
 
 app.use(express.static(join(resolve(), 'dist/www'), { extensions: ['html'] }))
 
-app.post('/stack/deploy', async (req, res) => {
+const deployStack = async (name: string, stack: string) => {
   try {
-    let { name, stack } = req.body as { name: string; stack: string }
     stack = stack.replace(/'/gm, '"')
 
     const reg = /^(\S*?)\.?stack\.?(\S*?)\.ya?ml$/
@@ -39,17 +38,18 @@ app.post('/stack/deploy', async (req, res) => {
     name = arr[1] || arr[2]
     if (!name) throw new Error('Invalid stack name')
 
-    const result = await exec(` printf '${stack}' | docker stack deploy --compose-file - ${name}`)
+    // while developing on windows
+    const cmd = ` printf '${stack}' | docker stack deploy --compose-file - ${name}`
+    const result = await exec(cmd)
 
-    return res.json({ status: 200, msg: result })
+    return { status: 200, msg: result }
   } catch (error) {
-    return res.status(400).json({ status: 400, msg: error.message })
+    return { status: 400, msg: error.message }
   }
-})
+}
 
-app.post('/secret/create', async (req, res) => {
+const createSecret = async (name: string, secret: string) => {
   try {
-    let { name, secret } = req.body as { name: string; secret: string }
     const reg = /^(\S+)(\.txt|\.json)$/
 
     const arr = reg.exec(name)
@@ -60,10 +60,21 @@ app.post('/secret/create', async (req, res) => {
 
     const result = await exec(` printf '${secret}' | docker secret create ${name} -`)
 
-    return res.json({ status: 200, msg: result })
+    return { status: 200, msg: result }
   } catch (error) {
-    return res.status(400).json({ status: 400, msg: error.message })
+    return { status: 400, msg: error.message }
   }
+}
+
+app.post('/upload', async (req, res) => {
+  let { name, stack, secret } = req.body as { name: string; stack: string; secret: string }
+  if (/\.ya?ml$/.test(name)) {
+    const s = await deployStack(name, stack)
+    return res.status(s.status).json(s)
+  } else if (/\.txt$|\.json$/.test(name)) {
+    const s = await createSecret(name, secret)
+    return res.status(s.status).json(s)
+  } else return res.status(400).json({ msg: 'Bad Request', status: 400 })
 })
 
 app.get('/api', (req, res) => {

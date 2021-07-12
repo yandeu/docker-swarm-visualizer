@@ -1,3 +1,5 @@
+import { Snackbar } from './snackbar.js'
+
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations
 export const dropContainer = `
 
@@ -34,7 +36,7 @@ export const dropContainerInit = () => {
     const reader = new FileReader()
     reader.onload = async event => {
       if (event?.target?.result) {
-        const result = await fetch('/stack/deploy', {
+        const result = await fetch('/upload', {
           // const result = await fetch('/secret/create', {
           method: 'POST',
           headers: {
@@ -43,11 +45,14 @@ export const dropContainerInit = () => {
           body: JSON.stringify({ name, stack: event.target.result, secret: event.target.result })
         })
         const json = await result.json()
-        console.log('RESULT:')
-        json.msg
-          .replace(/\n$/, '')
-          .split('\n')
-          .forEach(m => console.log('=> ', m))
+        const messages = json.msg.replace(/\n$/, '').split('\n')
+
+        messages.forEach(m => {
+          if (result.status === 200) new Snackbar(m)
+          console.log('=> ', m)
+        })
+
+        if (result.status !== 200) new Snackbar(messages[messages.length - 1])
       }
     }
 
