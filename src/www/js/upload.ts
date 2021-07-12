@@ -2,12 +2,10 @@ import { Snackbar } from './snackbar.js'
 
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations
 export const dropContainer = `
-
   <div id="drop-container">
     Drop Here
   </div>
   <!-- <input type="file" id="file-input" /> -->
-
 `
 
 export const dropContainerInit = () => {
@@ -20,43 +18,37 @@ export const dropContainerInit = () => {
   container.addEventListener('drop', (event: DragEvent) => {
     event.preventDefault()
 
-    const file = event?.dataTransfer?.files[0]
-    if (!file) return
+    if (!event?.dataTransfer?.files[0]) return
 
-    const name = file.name
+    for (let i = 0; i < event.dataTransfer.files.length - 1; i++) {
+      const file = event.dataTransfer.files[i]
+      const name = file.name
 
-    if (event && event.dataTransfer && event.dataTransfer.files.length > 1) {
-      console.warn('Only one file at the time please.')
-      return
-    }
+      const reader = new FileReader()
+      reader.onload = async event => {
+        if (event?.target?.result) {
+          const result = await fetch('/upload', {
+            // const result = await fetch('/secret/create', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name, stack: event.target.result, secret: event.target.result })
+          })
+          const json = await result.json()
+          const messages = json.msg.replace(/\n$/, '').split('\n')
 
-    // fileInput.files = event.dataTransfer.files
-    // const name = fileInput.files[0].name
+          messages.forEach(m => {
+            if (result.status === 200) new Snackbar(m)
+            console.log('=> ', m)
+          })
 
-    const reader = new FileReader()
-    reader.onload = async event => {
-      if (event?.target?.result) {
-        const result = await fetch('/upload', {
-          // const result = await fetch('/secret/create', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ name, stack: event.target.result, secret: event.target.result })
-        })
-        const json = await result.json()
-        const messages = json.msg.replace(/\n$/, '').split('\n')
-
-        messages.forEach(m => {
-          if (result.status === 200) new Snackbar(m)
-          console.log('=> ', m)
-        })
-
-        if (result.status !== 200) new Snackbar(messages[messages.length - 1])
+          if (result.status !== 200) new Snackbar(messages[messages.length - 1])
+        }
       }
-    }
 
-    reader.readAsText(file)
+      reader.readAsText(file)
+    }
   })
 
   container.addEventListener('dragover', (event: DragEvent) => {
@@ -79,8 +71,8 @@ const main = () => {
   const style = document.createElement('style')
   style.innerText = /* css */ `
   #drop-wrapper { position: fixed; top: 33%; left: 50%; transform: translate(-50%, -50%); z-index: 999; }
-  #drop-container { color: #f8f8f2; background: #0c0e1480; border-radius: 5px; width:200px; height:200px; border: 10px dashed #f8f8f2; text-align: center; vertical-align: middle; line-height: 200px; }
-  #drop-container.over { background:#6272a480; }`
+  #drop-container { font-size: 18px; color: #f8f8f2; background: #0c0e14e0; border-radius: 5px; width:200px; height:200px; border: 10px dashed #f8f8f2; text-align: center; vertical-align: middle; line-height: 200px; }
+  #drop-container.over { background:#6272a4e0; }`
   document.body.prepend(style)
 
   const div = document.createElement('div')

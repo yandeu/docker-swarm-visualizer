@@ -18,6 +18,9 @@
 - 🚀 **Drag and Drop Deployment** (in development)
   Easily deploy Stacks and Secrets via Drag and Drop.
 
+- 🧼 **Auto Clean your Swarm** (in planning)
+  Remove unused Images and dangling Containers.
+
 - 🏷️ **Auto Subnet Labeling** (beta)  
   Detects in which subnet your node is to better spread your containers.
 
