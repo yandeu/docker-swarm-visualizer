@@ -73,11 +73,14 @@ export const dropContainerInit = () => {
 }
 
 const main = () => {
+  // --black: #0c0e14;
+  // --white: #f8f8f2;
+
   const style = document.createElement('style')
   style.innerText = /* css */ `
-  #drop-wrapper { position: fixed; top: 33%; left: 50%; transform: translate(-50%, -50%); z-index: 999; background: #00000080; }
-  #drop-container { width:200px; height:200px; border: 10px dashed #ccc; text-align: center; vertical-align: middle; line-height: 200px; }
-  #drop-container.over { background-color:red; }`
+  #drop-wrapper { position: fixed; top: 33%; left: 50%; transform: translate(-50%, -50%); z-index: 999; }
+  #drop-container { color: #f8f8f2; background: #0c0e1480; border-radius: 5px; width:200px; height:200px; border: 10px dashed #f8f8f2; text-align: center; vertical-align: middle; line-height: 200px; }
+  #drop-container.over { background:#6272a480; }`
   document.body.prepend(style)
 
   const div = document.createElement('div')
