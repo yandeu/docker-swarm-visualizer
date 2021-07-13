@@ -15,10 +15,10 @@
 - 📦 **Automated Image Updates** (beta)  
   Automatically pulls the latest images from your Registry.
 
-- 🚀 **Drag and Drop Deployment** (in development)
+- 🚀 **Drag and Drop Deployment** (beta)  
   Easily deploy Stacks and Secrets via Drag and Drop.
 
-- 🧼 **Auto Clean your Swarm** (in planning)
+- 🧼 **Auto Clean your Swarm** (in planning)  
   Remove unused Images and dangling Containers.
 
 - 🏷️ **Auto Subnet Labeling** (beta)  
