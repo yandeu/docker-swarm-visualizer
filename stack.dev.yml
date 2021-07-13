@@ -1,0 +1,22 @@
+version: '3.9'
+
+services:
+  tools:
+    image: yandeu/dev-tools:dev
+    deploy:
+      placement:
+        preferences:
+          - spread: node.labels.subnet
+      replicas: 2
+      update_config:
+        parallelism: 2
+        order: start-first
+    ports:
+      - 3000:3000
+    labels:
+      - visualizer.autoscale.min=1
+      - visualizer.autoscale.max=5
+      - visualizer.autoscale.up.cpu=0.2
+      - visualizer.autoscale.down.cpu=0.1
+
+      - visualizer.autoupdate=true

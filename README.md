@@ -15,6 +15,12 @@
 - 📦 **Automated Image Updates** (beta)  
   Automatically pulls the latest images from your Registry.
 
+- 🚀 **Drag and Drop Deployment** (in development)
+  Easily deploy Stacks and Secrets via Drag and Drop.
+
+- 🧼 **Auto Clean your Swarm** (in planning)
+  Remove unused Images and dangling Containers.
+
 - 🏷️ **Auto Subnet Labeling** (beta)  
   Detects in which subnet your node is to better spread your containers.
 
@@ -58,6 +64,10 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 ## Tasks
 
 All tasks are either in Beta or in Development.
+
+### Drag and Drop Deployment
+
+Simply click on `⇪` and drag your files (stacks or secrets) into the Square.
 
 ### Autoscaler
 
