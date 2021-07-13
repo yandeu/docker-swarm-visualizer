@@ -65,6 +65,10 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 
 All tasks are either in Beta or in Development.
 
+### Drag and Drop Deployment
+
+Simply click on `⇪` and drag your files (stacks or secrets) into the Square.
+
 ### Autoscaler
 
 To enable and use the autoscaler add the env and labels below to your services:
