@@ -29,6 +29,8 @@ export const dropContainerInit = () => {
 
     if (!event?.dataTransfer?.files[0]) return
 
+    new Snackbar(`Uploading. Please wait...`)
+
     for (let i = 0; i < event.dataTransfer.files.length; i++) {
       const file = event.dataTransfer.files[i]
       const name = file.name
@@ -52,7 +54,11 @@ export const dropContainerInit = () => {
             console.log('=> ', m)
           })
 
-          if (result.status !== 200) new Snackbar(messages[messages.length - 1])
+          if (result.status !== 200) new Snackbar(`${name}: ${messages[messages.length - 1]}`)
+
+          // remove dropbox
+          const box = document.getElementById('drop-wrapper')
+          if (box) box.classList.add('is-hidden')
         }
       }
 
