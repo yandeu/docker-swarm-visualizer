@@ -44,6 +44,10 @@ h1 {
   color: var(--yellow);
 }
 
+.is-hidden {
+  display: none;
+}
+
 /* grid inspired by https://codepen.io/rickyruiz/pen/KemeoX */
 #nodes {
   min-height: calc(100vh - 3em);
@@ -245,4 +249,34 @@ p#credits {
 }
 #credits a:hover {
   color: #9da8b5;
+}
+
+/** UPLOAD */
+.upload-action {
+  cursor: pointer;
+}
+.upload-action:hover {
+  text-decoration: underline;
+}
+
+/** SNACKBAR */
+
+#snacks {
+  position: fixed;
+  bottom: 0px;
+  padding: 8px;
+  z-index: 999;
+}
+.snack {
+  color: var(--black);
+  background: var(--white);
+  padding: 8px 16px;
+  margin: 8px;
+  border-radius: 6px;
+  width: min(380px, 100vw - 64px);
+  font-size: 14px;
+  line-height: 2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }

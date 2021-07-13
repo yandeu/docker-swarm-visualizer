@@ -3,7 +3,16 @@ import { Snackbar } from './snackbar.js'
 // https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations
 export const dropContainer = `
   <div id="drop-container">
-    Drop Here
+    <p>
+      <b>Drop Here</b>
+      <br>
+        <ul>
+          <li>STACK_NAME.stack.yml</li>
+          <li>stack.STACK_NAME.yml</li>
+          <li>SECRET_NAME.txt</li>
+          <li>SECRET_NAME.json</li>
+        </ul>
+    </p>
   </div>
   <!-- <input type="file" id="file-input" /> -->
 `
@@ -20,7 +29,7 @@ export const dropContainerInit = () => {
 
     if (!event?.dataTransfer?.files[0]) return
 
-    for (let i = 0; i < event.dataTransfer.files.length - 1; i++) {
+    for (let i = 0; i < event.dataTransfer.files.length; i++) {
       const file = event.dataTransfer.files[i]
       const name = file.name
 
@@ -71,12 +80,16 @@ const main = () => {
   const style = document.createElement('style')
   style.innerText = /* css */ `
   #drop-wrapper { position: fixed; top: 33%; left: 50%; transform: translate(-50%, -50%); z-index: 999; }
-  #drop-container { font-size: 18px; color: #f8f8f2; background: #0c0e14e0; border-radius: 5px; width:200px; height:200px; border: 10px dashed #f8f8f2; text-align: center; vertical-align: middle; line-height: 200px; }
-  #drop-container.over { background:#6272a4e0; }`
+  #drop-container { box-sizing: border-box; padding: 16px; font-size: 18px; color: #f8f8f2; background: #0c0e14e0; border-radius: 5px; width:280px; height:200px; border: 10px dashed #f8f8f2; text-align: center; vertical-align: middle; }
+  #drop-container.over { background:#6272a4e0; }
+  #drop-container li { line-height: 1.6; font-size: 12px; }
+  `
+
   document.body.prepend(style)
 
   const div = document.createElement('div')
   div.id = 'drop-wrapper'
+  div.classList.add('is-hidden')
   div.innerHTML = dropContainer
   document.body.prepend(div)
 

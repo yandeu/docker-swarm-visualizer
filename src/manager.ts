@@ -67,6 +67,8 @@ const createSecret = async (name: string, secret: string) => {
 }
 
 app.post('/upload', async (req, res) => {
+  console.log('UPLOAD')
+
   let { name, stack, secret } = req.body as { name: string; stack: string; secret: string }
   if (/\.ya?ml$/.test(name)) {
     const s = await deployStack(name, stack)

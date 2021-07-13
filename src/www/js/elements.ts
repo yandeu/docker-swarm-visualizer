@@ -32,7 +32,8 @@ const node = node => {
               margin-bottom: 6px;"
               >
                 <p class="circle ${status} ${Role}"></p>
-                <b>${Addr}</b>
+                <b>${Addr}&nbsp;</b>
+                <b class="upload-action">⇪</b>
             </div>
           </li>
           <li class="os">-</li>

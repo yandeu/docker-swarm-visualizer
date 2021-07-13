@@ -20,7 +20,22 @@ const addNodes = async nodes => {
     const html: any = template.content.firstChild
 
     // do add if it does not already exist
-    if (!document.getElementById(html.id)) if (nodesHTML) nodesHTML.appendChild(html)
+    if (!document.getElementById(html.id)) {
+      if (nodesHTML) {
+        nodesHTML.appendChild(html)
+
+        // open uploader
+        const uploadAction = html?.querySelector('.upload-action')
+        if (uploadAction) {
+          const listener = () => {
+            const dropWrapper = document.getElementById('drop-wrapper')
+            if (dropWrapper) dropWrapper.classList.toggle('is-hidden')
+          }
+          uploadAction.removeEventListener('click', listener)
+          uploadAction.addEventListener('click', listener)
+        }
+      }
+    }
   })
 
   return nodes
