@@ -4,14 +4,14 @@
  * @license   {@link https://github.com/yandeu/docker-swarm-visualizer/blob/main/LICENSE LICENSE}
  */
 
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios'
 
 // echo -n 'username:password' | base64
 // hub.docker.io:hub.docker.io
 // github.com:GITHUB_ACCESS_TOKEN
 
 // enter auth without keeping in history
-// read: https://stackoverflow.com/a/8473153/12656855
+// read: https://stackoverflow.com/a/8473153
 //  printf "This is a secret" | docker secret create my_secret_data -
 //  echo -n 'username:password' | base64 | docker secret create visualizer_registry_login -
 
@@ -47,29 +47,62 @@ export class Registry {
   images: any[] = []
   BASIC_AUTH: string
 
-  constructor(public REGISTRY, AUTH = '') {
+  constructor(public REGISTRY: keyof typeof CONFIG, AUTH = '') {
     this.BASIC_AUTH = 'Basic ' + AUTH
   }
 
   requestImage(IMAGE, TAG = 'latest') {
-    this.images.push({ IMAGE, TAG })
+    // this.images.push({ IMAGE, TAG })
+    this.images[0] = { IMAGE, TAG } // just one image for now
     return this
   }
 
-  async getDigest(auth) {
-    const { token, access_token } = auth.data
+  private async request(auth, url, method: 'get' | 'post' | 'delete' | 'head'): Promise<AxiosResponse<any>> {
+    try {
+      if (!auth) throw new Error('Auth is missing!')
 
-    const img = this.images[0]
-    const res = await axios
-      .head(`${CONFIG[this.REGISTRY].REGISTRY_URL}/${img.IMAGE}/manifests/${img.TAG}`, {
+      const { token, access_token } = auth.data
+
+      const res = await axios[method](`${CONFIG[this.REGISTRY].REGISTRY_URL}/${url}`, {
         headers: {
           Authorization: `Bearer ${access_token ?? token}`,
           Accept: 'application/vnd.docker.distribution.manifest.v2+json'
         }
       })
-      .catch(e => console.log(e.message))
+      return { ...res, request: {}, config: {} }
+    } catch (error) {
+      return error.message
+    }
+  }
 
-    if (res) return res.headers['docker-content-digest']
+  async get(auth, url) {
+    return await this.request(auth, url, 'get')
+  }
+
+  async head(auth, url) {
+    return await this.request(auth, url, 'head')
+  }
+
+  async post(auth, url) {
+    return await this.request(auth, url, 'post')
+  }
+
+  async delete(auth, url) {
+    return await this.request(auth, url, 'delete')
+  }
+
+  async getManifest(auth) {
+    const img = this.images[0]
+    const url = `${img.IMAGE}/manifests/${img.TAG}`
+    const res = await this.get(auth, url)
+    if (res && res.data) return res.data
+  }
+
+  async getDigest(auth) {
+    const img = this.images[0]
+    const url = `${img.IMAGE}/manifests/${img.TAG}`
+    const res = await this.head(auth, url)
+    if (res && res.headers) return res.headers['docker-content-digest']
   }
 
   async Auth() {
