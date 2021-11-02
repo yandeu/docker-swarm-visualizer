@@ -58,7 +58,7 @@ app.delete('/containers/:id', async (req, res) => {
 
     const json = await containerRemove(id)
     res.send(json)
-  } catch (err: any) {
+  } catch (error: any) {
     res.status(500).send(error.message)
   }
 })
