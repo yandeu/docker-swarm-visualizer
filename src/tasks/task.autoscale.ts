@@ -43,7 +43,7 @@ export const executeTask = async (service: any, task: Tasks) => {
 
   try {
     await docker(`services/${serviceId}/update?version=${serviceVersion}`, 'POST', service.Spec)
-  } catch (error) {
+  } catch (error: any) {
     console.log('error', error.message)
   }
 }
