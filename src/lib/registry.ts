@@ -70,7 +70,7 @@ export class Registry {
         }
       })
       return { ...res, request: {}, config: {} }
-    } catch (error) {
+    } catch (error: any) {
       return error.message
     }
   }

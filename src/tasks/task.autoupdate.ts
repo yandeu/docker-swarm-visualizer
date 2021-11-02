@@ -49,7 +49,7 @@ export const checkImageUpdate = async () => {
       // check if digest of remote image is different from the local one
       // console.log({ localDigest, remoteDigest })
       if (localDigest && remoteDigest && localDigest !== remoteDigest) serviceUpdateImage(ID, IMAGE, TAG, remoteDigest)
-    } catch (error) {
+    } catch (error: any) {
       console.log('Error while autoupdate', error.message)
     }
   }

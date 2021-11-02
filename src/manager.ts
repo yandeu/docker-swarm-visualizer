@@ -43,7 +43,7 @@ const deployStack = async (name: string, stack: string) => {
     const result = await exec(cmd)
 
     return { status: 200, msg: result }
-  } catch (error) {
+  } catch (error: any) {
     return { status: 400, msg: error.message }
   }
 }
@@ -61,7 +61,7 @@ const createSecret = async (name: string, secret: string) => {
     const result = await exec(` printf '${secret}' | docker secret create ${name} -`)
 
     return { status: 200, msg: result }
-  } catch (error) {
+  } catch (error: any) {
     return { status: 400, msg: error.message }
   }
 }
@@ -100,7 +100,7 @@ app.delete('/api/dev/agent/:ip/containers/:id', async (req, res) => {
     const { ip, id } = req.params
     const response = await axios.delete(`http://${ip}:9501/containers/${id}`)
     res.send(response.data)
-  } catch (error) {
+  } catch (error: any) {
     res.status(500).send(error.message)
   }
 })
@@ -109,7 +109,7 @@ app.get('/api/dev/system/df', async (req, res) => {
   const system = await systemDF()
   try {
     return res.json(system)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -118,7 +118,7 @@ app.get('/api/dev/nodes', async (req, res) => {
   const nodes = await nodesInfo()
   try {
     return res.json(nodes)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -127,7 +127,7 @@ app.get('/api/dev/agents/dns', async (req, res) => {
   try {
     const dns = await agentDNSLookup()
     return res.json(dns)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -137,7 +137,7 @@ app.get('/api/dev/container/:hash', async (req, res) => {
     const { hash } = req.params
     const _container = await containerStats(hash)
     return res.json(_container)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -147,7 +147,7 @@ app.get('/api/dev/:node/info', async (req, res) => {
     const { node } = req.params
     const result = await fetch(`http://${node}:9501/info`)()
     return res.json(result)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -157,7 +157,7 @@ app.get('/api/dev/:node/containers', async (req, res) => {
     const { node } = req.params
     const result = await fetch(`http://${node}:9501/containers`)()
     return res.json(result)
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
@@ -173,7 +173,7 @@ app.get('/api/dev', async (req, res) => {
   try {
     const results = await Promise.allSettled(promises)
     return res.json({ nodes, results })
-  } catch (err) {
+  } catch (err: any) {
     return res.status(500).send(err.message)
   }
 })
