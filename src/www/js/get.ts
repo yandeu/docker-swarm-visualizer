@@ -24,7 +24,7 @@ const nodes = async () => {
     const res = await fetch(url)
     const json = await res.json()
     return json
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.message)
     return null
   }
