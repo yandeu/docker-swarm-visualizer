@@ -71,7 +71,7 @@ export const addSubnetLabel = async () => {
       const match = list.check(NodeAddr)
 
       if (match) found = label
-    } catch (error) {
+    } catch (error: any) {
       console.log(error.message)
     }
   }
