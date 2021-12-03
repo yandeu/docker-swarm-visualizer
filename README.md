@@ -42,7 +42,13 @@ Minimum Docker API = 1.41 (Run `docker version` to check your API version)
 
 ## Getting Started
 
-1. Make sure you are using docker in swarm mode (`docker swarm init`).
+1. Make sure you are using docker in swarm mode (`docker swarm init`).  
+```markdown
+# make sure the required ports are open
+TCP port 2377 for cluster management communications  
+TCP and UDP port 7946 for communication among nodes  
+UDP port 4789 for overlay network traffic  
+```
 
 2. Make sure you can access your swarm on port **9500/tcp**.
 
