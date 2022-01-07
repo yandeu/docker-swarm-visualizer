@@ -135,7 +135,7 @@ export interface Container {
   Created: number
   State: string
   Status: string
-  Ports: []
+  Ports: { IP: string; PrivatePort: number; PublicPort: number; Type: string }[]
   Labels: object
   SizeRw: number
   SizeRootFs: number
