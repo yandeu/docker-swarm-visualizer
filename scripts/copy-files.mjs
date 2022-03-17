@@ -1,11 +1,14 @@
 import chokidar from 'chokidar'
+import pkg from 'fs-extra'
 import { resolve, join } from 'path'
 import { copyFile, mkdirSync, unlinkSync } from 'fs'
-import { copySync } from 'fs-extra'
+
+#20 58.99 const { copySync } = pkg;
 
 const WATCH = process.env.WATCH === 'true' ? true : false
 
 // listen for file changed in the static folder
+const { copySync } = pkg;
 const src = join(resolve(), 'src/www')
 const dest = join(resolve(), 'dist/www')
 
