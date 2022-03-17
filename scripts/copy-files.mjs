@@ -3,8 +3,6 @@ import pkg from 'fs-extra'
 import { resolve, join } from 'path'
 import { copyFile, mkdirSync, unlinkSync } from 'fs'
 
-#20 58.99 const { copySync } = pkg;
-
 const WATCH = process.env.WATCH === 'true' ? true : false
 
 // listen for file changed in the static folder
