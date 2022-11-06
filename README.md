@@ -7,7 +7,7 @@
 ## 🥳 New
 
 If you like this Docker Swarm Visualizer,  
-you should also check out the new [Visualizer written in Rust](https://github.com/yandeu/docker-swarm-visualizer-rs).
+you should also check out the new [Visualizer written in Rust](https://hub.docker.com/r/yandeu/visualizer-rs).
 
 ## Features / Tasks
 
