@@ -4,6 +4,11 @@
    <img width="850" alt="screenshot" src="https://raw.githubusercontent.com/yandeu/docker-swarm-visualizer/main/readme/screenshot.png">
 </a>
 
+## 🥳 New
+
+If you like this Docker Swarm Visualizer,  
+you should also check out the new [Visualizer written in Rust](https://github.com/yandeu/docker-swarm-visualizer-rs).
+
 ## Features / Tasks
 
 - 📺 **Real-Time Monitoring**  
