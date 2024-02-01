@@ -12,7 +12,7 @@ const services: string[] = []
 const deletedContainers: string[] = []
 
 const node = node => {
-  const { Addr, Role, Availability, State } = node
+  const { Addr, Role, Availability, State, Hostname} = node
 
   const status = State === 'down' ? 'red' : 'yellow blink'
 
@@ -37,6 +37,7 @@ const node = node => {
             </div>
           </li>
           <li class="os">-</li>
+          <li class="os">${Hostname}</li>
           <li style="margin-bottom: 8px;">${Role} / ${Availability} / ${State}</li>
           ${State !== 'down' ? placeholders : ''}
         </ul>

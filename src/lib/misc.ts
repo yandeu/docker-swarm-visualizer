@@ -46,3 +46,108 @@ export const cpuCount = () => {
 export const cpuUsage = async () => {
   return await cpu.usage()
 }
+
+const NVIDIA = {
+  name: 'nvidia-smi --query-gpu=name --format=csv,noheader',
+  memClock: 'nvidia-smi --query-gpu=clocks.mem --format=csv,noheader',
+  GpuClock: 'nvidia-smi --query-gpu=clocks.gr --format=csv,noheader',
+	temp: 'nvidia-smi --query-gpu=temperature.gpu --format=csv,noheader',
+	usageGpu: 'nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader',
+	memoryTotal: 'nvidia-smi --query-gpu=memory.total --format=csv,noheader',
+	memoryFree: 'nvidia-smi --query-gpu=memory.free --format=csv,noheader',
+	memoryUsed: 'nvidia-smi --query-gpu=memory.used --format=csv,noheader',
+	memoryUtilization: 'nvidia-smi --query-gpu=utilization.memory --format=csv,noheader',
+	powerDraw: 'nvidia-smi --query-gpu=power.draw --format=csv,noheader',
+}
+
+const promiseExec = (command: string) =>
+  new Promise<string>((resolve, reject) => {
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(stdout);
+      }
+    });
+  });
+
+export const getName = async (): Promise<string> => {
+  try {
+  const name = await promiseExec(NVIDIA.name);
+  return name.trim();
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getTemp = async (): Promise<string> => {
+  try {
+  const temp = await promiseExec(NVIDIA.temp);
+  return temp.trim();
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getUsage = async (): Promise<string> => {
+  try {
+  const usage = await promiseExec(NVIDIA.usageGpu);
+  return usage.trim();
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getMemoryTotal = async (): Promise<string> => {
+  try {
+  const memory = await promiseExec(NVIDIA.memoryTotal);
+  return memory.trim().replace(/[A-Z]\w+/g, '');
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getMemoryFree = async (): Promise<string> => {
+  try {
+  const memory = await promiseExec(NVIDIA.memoryFree);
+  return memory.trim().replace(/[A-Z]\w+/g, '');
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getMemoryUsed = async (): Promise<string> => {
+  try {
+  const memory = await promiseExec(NVIDIA.memoryUsed);
+  return memory.trim().replace(/[A-Z]\w+/g, '');
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getGpuClock = async (): Promise<string> => {
+  try {
+  const clock = await promiseExec(NVIDIA.GpuClock);
+  return clock.trim().replace(/[A-Z]\w+/g, '');
+  } catch (err) {
+  return err.message;
+  }
+};
+
+export const getMemUtil = async (): Promise<string> => {
+	try {
+	  const memutil = await promiseExec(NVIDIA.memoryUtilization)
+		  return memutil.trim()
+	  } catch (err) {
+		  return err.message
+	  }
+};
+
+export const getPower = async (): Promise<string> => {
+	try {
+	  const pow = await promiseExec(NVIDIA.powerDraw)
+		  return pow.trim()
+	  } catch (err) {
+		  return err.message
+	  }
+};

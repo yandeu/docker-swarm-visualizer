@@ -5,7 +5,7 @@
  */
 
 import { docker } from './docker.js'
-import { cpuCount, cpuUsage, diskUsage, memUsage } from './misc.js'
+import { cpuCount, cpuUsage, diskUsage, memUsage, getUsage, getGpuClock, getMemUtil, getMemoryFree, getMemoryTotal, getMemoryUsed, getName, getPower, getTemp } from './misc.js'
 
 export interface Service {
   ID: string
@@ -115,16 +115,6 @@ export interface Image {
   RootFS: any
 }
 
-export interface Node {
-  ID: string
-  Version: { Index: number }
-  CreatedAt: string
-  UpdatedAt: string
-  Spec: { Availability: string; Name: string; Role: 'manager' | 'worker'; Labels: {} }
-  Description: {}
-  Status: { State: string; Message: string; Addr: string }
-  ManagerStatus: {}
-}
 
 export interface Container {
   Id: string
@@ -145,6 +135,18 @@ export interface Container {
   [key: string]: any
 }
 
+export interface Node {
+  ID: string
+  Version: { Index: number }
+  CreatedAt: string
+  UpdatedAt: string
+  Spec: { Availability: string; Name: string; Role: 'manager' | 'worker'; Labels: {} }
+  Description: { Hostname: string }
+  Status: { State: string; Message: string; Addr: string }
+  ManagerStatus: {}
+}
+
+
 export const systemDF = async () => {
   return await docker('system/df')
 }
@@ -161,7 +163,8 @@ export const nodesInfo = async () => {
       Addr: node.Status.Addr,
       Role: node.Spec.Role,
       Availability: node.Spec.Availability,
-      State: node.Status.State
+      State: node.Status.State,
+      Hostname: node.Description.Hostname
     }
   })
 }
@@ -222,6 +225,16 @@ export const info = async (
   cpuUsage?: any
   memUsage?: any
   disk?: any
+  gpuUse?: any
+  gpuClock?: any
+  gpumemUtil?: any
+  gpumemFree?: any
+  gpumemTot?: any
+  gpumemUsed?: any
+  gpuName?: any
+  gpuPower?: any
+  gpuTemp?: any
+  
 }> => {
   const info: any = await docker('info')
 
@@ -243,7 +256,16 @@ export const info = async (
     cpuCount: await cpuCount(),
     cpuUsage: await cpuUsage(),
     memUsage: await memUsage(),
-    disk: await diskUsage()
+    disk: await diskUsage(),
+    gpuUse: await getUsage(),
+    gpuClock: await getGpuClock(),
+    gpumemUtil: await getMemUtil(),
+    gpumemFree: await getMemoryFree(),
+    gpumemTot: await getMemoryTotal(),
+    gpumemUsed: await getMemoryUsed(),
+    gpuName: await getName(),
+    gpuPower: await getPower(),
+    gpuTemp: await getTemp(),
   }
 }
 

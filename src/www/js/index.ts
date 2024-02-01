@@ -94,7 +94,24 @@ const main = async () => {
     if (index > -1) nodeAddresses.splice(index, 1)
 
     // update stats of node
-    const { NodeAddr, MemTotal, cpuCount, cpuUsage, disk, memUsage, OperatingSystem } = info
+    let { NodeAddr, MemTotal, cpuCount, cpuUsage, disk, memUsage, OperatingSystem, gpuUse, gpumemTot, gpumemUtil } = info
+
+    if (gpuUse.includes('nvidia-smi: not found')) {
+      gpuUse = 'NA'
+    }
+    else { gpuUse = gpuUse.replace(" ","")}
+    if (gpumemTot.includes('nvidia-smi: not found')) {
+      gpumemTot = 'NA'
+    }
+    else { gpumemTot = gpumemTot.replace(" ","");
+    gpumemTot = parseInt(gpumemTot, 10);
+    gpumemTot = `${(gpumemTot/1024).toFixed(3)}G`;
+  }
+    if (gpumemUtil.includes('nvidia-smi: not found')) {
+      gpumemUtil = 'NA'
+    }
+    else { gpumemUtil = gpumemUtil.replace(" ","")}
+
     const NodeAddrID = ipToId(NodeAddr)
     const nodeHTML = document.getElementById(NodeAddrID)
     if (nodeHTML) {
@@ -104,11 +121,11 @@ const main = async () => {
 
       // replace usage
       const usage = nodeHTML.querySelector('.usage')
-      if (usage) usage.innerHTML = `${toGiB(MemTotal)}G / ${cpuCount} Cors / ${disk?.Size}`
+      if (usage) usage.innerHTML = `${toGiB(MemTotal)}G / ${cpuCount} Cors / ${disk?.Size} / ${gpumemTot}`
 
       // replace usage_percent
       const usage_percent = nodeHTML.querySelector('.usage_percent')
-      if (usage_percent) usage_percent.innerHTML = `${memUsage}% / ${cpuUsage}% / ${disk?.Percent}`
+      if (usage_percent) usage_percent.innerHTML = `${memUsage}% / ${cpuUsage}% / ${disk?.Percent} / ${gpumemUtil} / ${gpuUse}`
     }
 
     // add containers
